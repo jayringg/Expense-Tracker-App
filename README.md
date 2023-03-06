@@ -1,2 +1,2 @@
 # Expense-Tracker-App
-To track all expenses in one place.
+The purpose of this app is to give the user the ability to track all of their expenses and their income and easily make adjustments. 
