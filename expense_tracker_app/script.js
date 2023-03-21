@@ -1,16 +1,28 @@
 //Wait for window to load before starting
 window.addEventListener('load', () => {
-  //Create variables to work with our buttons and input value
+//Create variables to work with our buttons and input value
   const addItem = document.getElementById('add-item');
   const deleteItem = document.getElementById('delete-item');
   const valuesContainer = document.getElementById('expenses-container');
+  const totalExpenses = document.getElementById('total-expenses-container');
   const addIncome = document.getElementById('add-income');
-  
-  // Load any items that are stored in the local storage 
+  const deleteIncome = document.getElementById('delete-income');
+  const incomeContainer = document.getElementById('income-container');
+  const savings = document.getElementById('savings');
+  incomeContainer.textContent = `Total Income = $0.00`;
+  totalExpenses.textContent = `Total Expenses = $0.00`;
+  savings.textContent = `Total Savings = $0.00`;
+//Load items from local storage
   function loadItems() {
     try {
-      const items = JSON.parse(localStorage.getItem('items'));
-      if (items) {
+      const data = JSON.parse(localStorage.getItem('myData'));
+      if (data) {
+        const { items, income, expenses} = data;
+        
+        incomeContainer.textContent = income;
+        
+        totalExpenses.textContent = expenses;
+
         items.forEach(item => {
           const newItem = document.createElement('p');
           newItem.textContent = item;
@@ -22,16 +34,18 @@ window.addEventListener('load', () => {
     }
   }
   
+  
   loadItems();
-
-  //Save items to local Storage
-  function saveItems() {
+//Save items to local storage
+ function saveItems() {
     const items = [];
     const itemList = valuesContainer.querySelectorAll('p');
     itemList.forEach(item => {
       items.push(item.textContent);
     });
-    localStorage.setItem('items', JSON.stringify(items));
+    const income = incomeContainer.textContent;
+    const expenses = totalExpenses.textContent;
+    localStorage.setItem('myData', JSON.stringify({ items, income, expenses}));
   }
 
   // Calculate Total Expenses
@@ -43,50 +57,92 @@ window.addEventListener('load', () => {
       total += parseFloat(value);
     });
     const totalExpenses = document.getElementById('total-expenses-container');
-    totalExpenses.textContent = `Total Expenses = $${total.toFixed(2)}`;
+    const formattedTotal = total.toLocaleString('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+    totalExpenses.textContent = `Total Expenses = $${formattedTotal}`;
+    saveItems();
   }
-
+  
   //Add Income
   addIncome.addEventListener('click', (e) =>{
     e.preventDefault();
-    let income = document.getElementById('input-income').value;
-    const totalIncome = document.getElementById('income-container');
-    totalIncome.textContent = `Total Income = $${income}`;
-  });
+    let income = document.getElementById('input-income').value.trim().replace(/\s+/g, '').replace(/[^0-9.]/g, "");
+    if (!income) {
+      console.error('Invalid input:', income);
+      alert('Please enter a valid income.');
+      document.getElementById('input-income').value = ''; // clear input box
+      return;
+    }
+    if (income.includes('.')) {
+      let formattedValue = parseFloat(income);
+      let formattedString = formattedValue.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      const totalIncome = document.getElementById('income-container');
+      if (totalIncome.textContent !== 'Total Income = $0.00') {
+        totalIncome.textContent = '';
+      }
+      totalIncome.textContent = `Total Income = $${formattedString}`;
+    } else {
+      let formattedValue = parseFloat(income);
+      let formattedString = formattedValue.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      });
+      const totalIncome = document.getElementById('income-container');
+      if (totalIncome.textContent !== 'Total Income = $0.00') {
+        totalIncome.textContent = '';
+      }
+      totalIncome.textContent = `Total Income = $${formattedString}`;
+    }
+    document.getElementById('input-income').value = ''; // clear input box
+    saveItems();
+    calculateSavings();
+});
 
-  //add new items to our list with commas, decimals, and $ 
+  // Delete Income
+  deleteIncome.addEventListener('click', (e) => {
+    e.preventDefault();
+    if(incomeContainer.textContent === 'Total Income = $0.00') {
+      console.error('No income to delete.');
+      alert('No income to delete.');
+    }
+    incomeContainer.textContent = 'Total Income = $0.00';
+    saveItems();
+    calculateSavings();
+    return;
+  });
+  
+
+  //Add New Items To Our List With Commas, Decimals, and $ 
   addItem.addEventListener('click', (e) => {
     e.preventDefault();
-    let inputValue = document.getElementById('input-value').value.trim();
-    if (inputValue.includes(',')) {
-      inputValue = inputValue.replace(/,/g, '');
-    }
+    let inputValue = document.getElementById('input-value').value.trim().replace(/\s+/g, '').replace(/[^0-9.]/g, "");
     if (!inputValue) {
-      console.error('Invalid input:', inputValue);
-      alert('Please enter a valid value.');
-      document.getElementById('input-value').value = ''; // clear input box
-      return;
+        console.error('Invalid input:', inputValue);
+        alert('Please enter a valid expense.');
+        document.getElementById('input-value').value = ''; 
+        return;
     }
     let formattedValue = parseFloat(inputValue);
-    if (!formattedValue) {
-      console.error('Invalid input:', inputValue);
-      alert('Please enter a valid number.');
-      document.getElementById('input-value').value = ''; // clear input box
-      return;
-    }
     let formattedString = formattedValue.toLocaleString('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
     });
     const newItem = document.createElement('p');
     newItem.textContent = `$${formattedString}`;
     valuesContainer.appendChild(newItem);
     saveItems();
-    document.getElementById('input-value').value = ''; // clear input box
+    document.getElementById('input-value').value = ''; 
     calculateTotalExpenses();
-  });
+    calculateSavings();
+});
+
   
-  //Delete the last item from our list
+  //Delete The Last Item From Our List
   deleteItem.addEventListener('click', (e) => {
     e.preventDefault();
     const lastItem = valuesContainer.lastChild;
@@ -94,13 +150,14 @@ window.addEventListener('load', () => {
       valuesContainer.removeChild(lastItem);
       saveItems();
     } else {
-      console.error('No items to delete.');
-      alert('No items to delete.');
+      console.error('No expenses to delete.');
+      alert('No expenses to delete.');
     }
     calculateTotalExpenses();
+    calculateSavings();
   });
   
-  // Edit Expenses
+  //Edit Expenses
   valuesContainer.addEventListener('click', (e) => {
       if (e.target.tagName === 'P') {
         const oldValue = e.target.textContent;
@@ -120,9 +177,13 @@ window.addEventListener('load', () => {
             if (input.value.trim() !== '') {
               e.target.textContent = input.value;
               saveItems();
+              calculateTotalExpenses();
+              calculateSavings();
             } else {
               valuesContainer.removeChild(e.target);
               saveItems();
+              calculateTotalExpenses();
+              calculateSavings();
             }
           }
         });
@@ -134,9 +195,13 @@ window.addEventListener('load', () => {
             if (input.value.trim() !== '') {
               e.target.textContent = input.value;
               saveItems();
+              calculateTotalExpenses();
+              calculateSavings();
             } else {
               valuesContainer.removeChild(e.target);
               saveItems();
+              calculateTotalExpenses();
+              calculateSavings();
             }
             e.target.removeChild(input);
           } else if (event.key === 'Escape') {
@@ -146,5 +211,20 @@ window.addEventListener('load', () => {
         });
       }
     });
-    
+  //Calculate The Total Savings    
+    function calculateSavings() {
+      const income2 = incomeContainer.textContent.replace(/\s+/g, '').replace(/[^0-9.]/g, "");
+      expenses2 = totalExpenses.textContent.replace(/\s+/g, '').replace(/[^0-9.]/g, "");
+      parseFloat(income2.match(/\d+\.\d+/)[0]);
+      parseFloat(expenses2.match(/\d+\.\d+/)[0]);
+      const savings2 = (income2 - expenses2).toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    });
+      savings.textContent = `Total Savings = $${savings2}`;
+      return savings2;
+      }
+
+      calculateSavings();
+
 });
