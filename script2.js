@@ -118,26 +118,29 @@ forms.forEach(form => {
         }
     }
   }
-  
+
   function handleInputBlur(event) {
     const input = event.target;
     if (input.tagName === 'INPUT') {
-      const div = input.parentElement;
-      const inputs = div.children;
-      const input1 = inputs[0];
-      const input2 = inputs[1];
-      if (input1.value === '' && input2.value === '') {
-        div.remove();
-        calculateTotalIncome()
-        calculateTotal();
-        saveItems();
-      } else {
-        calculateTotalIncome()
-        calculateTotal();
-        saveItems();
-      }
+      setTimeout(() => {
+        const div = input.parentElement;
+        const inputs = div.children;
+        const input1 = inputs[0];
+        const input2 = inputs[1];
+        if (input1.value === '' && input2.value === '') {
+          div.remove();
+          calculateTotalIncome();
+          calculateTotal();
+          saveItems();
+        } else {
+          calculateTotalIncome();
+          calculateTotal();
+          saveItems();
+        }
+      }, 100);
     }
   }
+  
   
   // Calculate Total Expenses
   function calculateTotal() {
