@@ -1,0 +1,239 @@
+ * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    background-color: #eefffd;
+}
+
+.total-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #008481;
+    padding: 1em 5vw 1em 5vw;
+}
+
+.total-container-div {
+    background-color: #008481;
+    color: #fff;
+}
+
+.total-income {
+    margin: 0;
+    font-size: 1.2em;
+    padding: 2em;
+    background-color: #008481;
+}
+
+.total-income p {
+    background-color: #008481;
+    color: #fff;
+}
+
+.total-expense {
+    background-color: #008481;
+    margin: 0;
+    font-size: 1.2em;
+    padding: 2em;
+}
+
+.total-expense p {
+    background-color: #008481;
+    color: #fff;
+}
+
+.total-savings{
+    background-color: #008481;
+    margin: 0;
+    font-size: 1.2em;
+    padding: 2em;
+}
+
+.total-savings p {
+    background-color: #008481;
+    color: #fff;
+}
+
+#income-container-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.income-container-div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+    padding: 0 8vw 0 8vw;
+}
+
+#income-container-form input {
+    all: initial;
+    color: #000;
+    width: 40%;
+    border-radius: .25em;
+    background-color: #fff;
+    font-size: 1em;
+    padding: 0.4em;  
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .2); 
+}
+
+#expense-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.expense-form-div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1em;
+    padding: 0 8vw 0 8vw;
+}
+
+.expense-form-div input {
+    all: initial;
+    color: #000;
+    background-color: #fff;
+    width: 40%;
+    border-radius: .25em;
+    font-size: 1em;
+    padding: 0.5em;
+    font-size: 1em;
+    padding: 0.4em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+}
+
+.income-form-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;  
+}
+
+.income-buttons {
+    all: initial;
+    margin: 2em 8vw 1em 8vw;
+    font-size: 1em;
+    border-radius: .35em;
+    color: #fff;
+    padding: .6em .75em .6em .75em;
+    background-color: #008481;
+}
+
+.income-buttons:hover {
+    background-color: #006c6e;
+}
+
+.expense-form-buttons {
+    all: initial;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.expense-buttons {
+    border: none;
+    margin: 2em 8vw 1em 8vw;
+    font-size: .9em;
+    border-radius: .35em;
+    color:#fff;
+    background-color: #ff6a00ee;
+    padding: .6em .75em .6em .75em;
+} 
+
+.expense-buttons:hover {
+    background-color: #e85900ee;
+}
+
+    @media only screen and (min-width: 614px) {
+
+      .total-income p {
+        padding-bottom: .5em;
+    }
+
+      .total-expense p {
+        padding-bottom: .5em;
+    } 
+
+      .total-savings p {
+        padding-bottom: .5em;
+    }
+
+    .total-container {
+        padding: 1em 1.5em 1.85em 1.5em;
+    }
+
+}
+
+ @media only screen and (min-width: 1025px) {
+    
+   .total-container {
+        display: flex;
+        justify-content: space-between;
+        background-color: #008481;
+        padding: 1em 7vw 1em 7vw;
+    }
+    
+    .total-income {
+        font-size: 1.5em;
+    }
+    
+    .total-expense {
+        font-size: 1.5em;
+    }
+    
+    .total-savings{
+        font-size: 1.5em;
+    }
+
+    #income-container-form-div {
+        margin: 0 2.5vw 0 2.5vw;
+    }
+    
+    #income-container-form input {
+        width: 40%;
+        font-size: 1.25em;
+        padding: 0.4em;  
+    }
+
+    #expense-form-div {
+        margin: 0 2.5vw 0 2.5vw;
+    }
+    
+    .expense-form-div input {
+        width: 40%;
+        font-size: 1.25em;
+        padding: 0.4em;    
+    } 
+
+    .income-buttons {
+        font-size: 1.25em;
+    }
+
+    .expense-buttons {
+        font-size: 1.1em;
+    }
+
+} 
+
+@media only screen and (min-width: 1250px) {
+   
+         #income-container-form input {
+        
+        width: 411.73px;
+    } 
+    
+    .expense-form-div input {
+        width: 411.73px;
+    }
+}
+
+@media only screen and (min-width: 1310px) {
+
+         #income-container-form input {
+    
+            width: 38%;
+        } 
+        
+        .expense-form-div input {
+            width: 38%
+        }
+    
+    }
